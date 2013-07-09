@@ -1,10 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE DeriveGeneric #-}
 module Item where
-import           GHC.Generics (Generic)
 import           Control.Lens
-import           Data.List ((\\))
-import           Data.Vector (Vector,empty,toList)
+import           Data.List    ((\\))
+import           Data.Vector  (Vector, empty)
 
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
@@ -18,15 +16,15 @@ data MaterialCloth = Cloth | Leather
 data Category = CraftMaterial | Weapon | Armor | Tool
   deriving (Show, Read, Eq, Ord)
 
-data CraftMaterial = MaterialMetal | MaterialCloth           
+data CraftMaterial = MaterialMetal | MaterialCloth
   deriving (Show, Read, Eq, Ord)
 
-data Item = Item { _name         :: String
-                 , _quality      :: Int
-                 , _weight       :: Int
-                 , _category     :: Category
-                 , _valuePer     :: Int
-                 , _material     :: [CraftMaterial]
+data Item = Item { _name     :: String
+                 , _quality  :: Int
+                 , _weight   :: Int
+                 , _category :: Category
+                 , _valuePer :: Int
+                 , _material :: [CraftMaterial]
                  }
             deriving (Read, Eq)
 
