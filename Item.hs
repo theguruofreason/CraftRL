@@ -6,7 +6,6 @@ import           Control.Lens
 import           Data.List ((\\))
 import           Data.Vector (Vector,empty,toList)
 
-
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
 
@@ -110,4 +109,5 @@ haveItem player itemslot = case findItem player p of
       p _ i = i^.item      == itemslot^.item
            && i^.stackSize >= itemslot^.stackSize
 
-craft player recipe = over (recipe.traverse.ingredients) removeItem player
+--put a craft function in here; use fold
+--craft player recipe = over (recipe.traverse.ingredients) removeItem player
