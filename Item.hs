@@ -19,17 +19,22 @@ data Category = CraftMaterial | Weapon | Armor | Tool
 data CraftMaterial = MaterialMetal | MaterialCloth
   deriving (Show, Read, Eq, Ord)
 
-data Item = Item { _name     :: String
-                 , _quality  :: Int
-                 , _weight   :: Int
-                 , _category :: Category
-                 , _valuePer :: Int
-                 , _material :: [CraftMaterial]
-                 }
+type Quantity = Int
+
+data Item = Composite { _name       :: String
+                      , _quality    :: Int
+                      , _weight     :: Int
+                      , _category   :: Category
+                      , _valuePer   :: Int
+                      , _components :: [Item]
+                      }
+          | Primitive { _material :: CraftMaterial
+                      , _quantity :: Int
+                      }
             deriving (Read, Eq)
 
 instance Show Item where
-  show (Item n q w _ _ _) = qual ++ n ++ wt
+  show (Composite n q w _ _ _) = qual ++ n ++ wt
                               where
                                 qual = qualityAdj !! q
                                 wt = " (" ++ show w ++ ") "
@@ -56,18 +61,18 @@ data Player = Player { _inventory   :: Inventory
   deriving (Show, Read, Eq)
 
 data Recipe = Recipe { _produced    :: [ItemSlot]
-                     , _ingredients :: [(Int,CraftMaterial)]
+                     , _ingredients :: [(Int,Item)]
                      , _toolsreq    :: [ItemSlot]
                      , _skillreq    :: [(Int,Skill)]
                      }
 
 -- Some quick junk stuff to test with --
 joe = Player empty 0 0 0 0
-theaxe = Item "axe" 4 3 Tool 10 []
-asword = Item "sword" 6 4 Weapon 10 []
-someiron = Item "bar of iron" 0 2 CraftMaterial 5 []
+theaxe = Composite "axe" 4 3 Tool 10 []
+asword = Composite "sword" 6 4 Weapon 10 []
+someiron = Composite "bar of iron" 0 2 CraftMaterial 5 []
 
-recAxe ing1 ing2 = Recipe { _produced    = [ItemSlot 1 'a' (Item "axe" 4 3 Tool 10 [ing1,ing2])]
+recAxe ing1 ing2 = Recipe { _produced    = [ItemSlot 1 'a' (Composite "axe" 4 3 Tool 10 [ing1,ing2])]
                           , _ingredients = [(1,ing1),(1,ing2)]
                           , _toolsreq    = []
                           , _skillreq    = []
