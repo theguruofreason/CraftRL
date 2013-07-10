@@ -15,7 +15,7 @@ data MaterialCloth = Cloth | Leather
 
 data Category = CraftMaterial | Weapon | Armor | Tool
   deriving (Show, Read, Eq, Ord)
-
+-- test merge junk
 data CraftMaterial = MaterialMetal | MaterialCloth
   deriving (Show, Read, Eq, Ord)
 
