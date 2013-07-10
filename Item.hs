@@ -13,23 +13,21 @@ data MaterialMetal = Iron | Copper | Steel | Bronze
 data MaterialCloth = Cloth | Leather
   deriving (Show, Read, Eq, Ord)
 
-data Category = CraftMaterial | Weapon | Armor | Tool
-  deriving (Show, Read, Eq, Ord)
-
 data CraftMaterial = MaterialMetal | MaterialCloth
   deriving (Show, Read, Eq, Ord)
 
-type Quantity = Int
+newtype Category = Category { unCategory :: String }
 
-data Item = Composite { _name       :: String
+newtype Name = Name { unName :: String }
+
+data Item = Composite { _name       :: Name
                       , _quality    :: Int
                       , _weight     :: Int
                       , _category   :: Category
                       , _valuePer   :: Int
                       , _components :: [Item]
                       }
-          | Primitive { _material :: CraftMaterial
-                      , _quantity :: Int
+          | Primitive { _name  :: Name
                       }
             deriving (Read, Eq)
 
