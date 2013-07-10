@@ -7,14 +7,16 @@ import           Data.Vector  (Vector, empty)
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
 
-
-
-data Category = CraftMaterial | Weapon | Armor | Tool
-  deriving (Show, Read, Eq, Ord)
-
 type Quantity = Int
 
-data Item = Composite { _name       :: String
+data CraftMaterial = MaterialMetal | MaterialCloth
+  deriving (Show, Read, Eq, Ord)
+
+newtype Category = Category { unCategory :: String }
+
+newtype Name = Name { unName :: String }
+
+data Item = Composite { _name       :: Name
                       , _quality    :: Int
                       , _weight     :: Int
                       , _category   :: Category
