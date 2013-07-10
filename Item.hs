@@ -9,9 +9,6 @@ qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great
 
 type Quantity = Int
 
-data CraftMaterial = MaterialMetal | MaterialCloth
-  deriving (Show, Read, Eq, Ord)
-
 newtype Category = Category { unCategory :: String }
 
 newtype Name = Name { unName :: String }
@@ -25,7 +22,6 @@ data Item = Composite { _name       :: Name
                       }
           | Primitive { _name     :: String
                       , _category :: Category
-                      , _material :: CraftMaterial
                       }
             deriving (Read, Eq)
 
