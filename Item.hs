@@ -13,8 +13,10 @@ data CraftMaterial = MaterialMetal | MaterialCloth
   deriving (Show, Read, Eq, Ord)
 
 newtype Category = Category { unCategory :: String }
+    deriving (Read,Eq)
 
 newtype Name = Name { unName :: String }
+    deriving (Read,Eq)
 
 data Item = Composite { _name       :: Name
                       , _quality    :: Int
@@ -23,14 +25,12 @@ data Item = Composite { _name       :: Name
                       , _valuePer   :: Int
                       , _components :: [Item]
                       }
-          | Primitive { _name     :: String
-                      , _category :: Category
-                      , _material :: CraftMaterial
+          | Primitive { _name     :: Name
                       }
             deriving (Read, Eq)
 
 instance Show Item where
-  show (Composite n q w _ _ _) = qual ++ n ++ wt
+  show (Composite n q w _ _ _) = qual ++ unName n ++ wt
                               where
                                 qual = qualityAdj !! q
                                 wt = " (" ++ show w ++ ") "
@@ -64,11 +64,11 @@ data Recipe = Recipe { _produced    :: [ItemSlot]
 
 -- Some quick junk stuff to test with --
 joe = Player empty 0 0 0 0
-theaxe = Composite "axe" 4 3 Tool 10 []
-asword = Composite "sword" 6 4 Weapon 10 []
-someiron = Composite "bar of iron" 0 2 CraftMaterial 5 []
+theaxe = Composite (Name "axe") 4 3 (Category "tool") 10 []
+asword = Composite (Name "sword") 6 4 (Category "weapon") 10 []
+someiron = Primitive (Name "iron")
 
-recAxe ing1 ing2 = Recipe { _produced    = [ItemSlot 1 'a' (Composite "axe" 4 3 Tool 10 [ing1,ing2])]
+recAxe ing1 ing2 = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
                           , _ingredients = [(1,ing1),(1,ing2)]
                           , _toolsreq    = []
                           , _skillreq    = []
