@@ -7,11 +7,6 @@ import           Data.Vector  (Vector, empty)
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
 
-type Quantity = Int
-
-data CraftMaterial = MaterialMetal | MaterialCloth
-  deriving (Show, Read, Eq, Ord)
-
 newtype Category = Category { unCategory :: String }
     deriving (Read,Eq)
 
