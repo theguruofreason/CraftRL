@@ -51,10 +51,12 @@ data Player = Player { _inventory   :: Inventory
   deriving (Show, Read, Eq)
 
 data Recipe = Recipe { _produced    :: [ItemSlot]
-                     , _ingredients :: [ItemSlot]
+                     , _ingredients :: [Ingredient]
                      , _toolsreq    :: [ItemSlot]
                      , _skillreq    :: [(Int,Skill)]
                      }
+
+data Ingredient = DiscreteItem ItemSlot | AbstractItem Int Category
 
 $(makeLenses ''Item)
 $(makeLenses ''ItemSlot)
