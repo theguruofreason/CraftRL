@@ -64,11 +64,11 @@ theaxe = Composite (Name "axe") 4 3 (Category "tool") 10 []
 asword = Composite (Name "sword") 6 4 (Category "weapon") 10 []
 someiron = Primitive (Name "iron")
 
-recAxe ing1 ing2 = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
-                          , _ingredients = [ItemSlot 2 'b' someiron]
-                          , _toolsreq    = []
-                          , _skillreq    = []
-                          }
+recAxe = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
+                , _ingredients = [ItemSlot 2 'b' someiron]
+                , _toolsreq    = []
+                , _skillreq    = []
+                }
 
 $(makeLenses ''Item)
 $(makeLenses ''ItemSlot)
@@ -78,11 +78,14 @@ $(makeLenses ''Recipe)
 addItem :: ItemSlot -> Player -> Player
 addItem itemslot player = case findItem player p of
                             Just (i,_) -> player & inventory %~ over (ix i) stackItems
-                            Nothing    -> player & inventory %~ cons (itemslot & itemLetter .~ availLetter)
+                            Nothing    -> checkIfLetterAvailable                                          
     where
       stackItems i = i & stackSize +~ itemslot^.stackSize
-      availLetter = head $ (['a'..'z'] ++ ['A'..'Z']) \\ (player & toListOf (inventory.traverse.itemLetter))
+      availLetters = (['a'..'z'] ++ ['A'..'Z']) \\ (player & toListOf (inventory.traverse.itemLetter))
       p _ i = i^.item == itemslot^.item
+      checkIfLetterAvailable = case (itemslot^.itemLetter) `elem` availLetters of
+                                 True  -> player & inventory %~ cons itemslot
+                                 False -> player & inventory %~ cons (itemslot & itemLetter .~ head availLetters)
 
 removeItem ::  ItemSlot -> Player -> Player
 removeItem itemslot player = case findItem player p of
@@ -104,7 +107,7 @@ haveItem player itemslot = case findItem player p of
       p _ i = i^.item      == itemslot^.item
            && i^.stackSize >= itemslot^.stackSize
 
-takeIngredients player recipe = (recipe^.traverse.ingredients) & foldrOf folded removeItem player 
+takeIngredients player recipe = (recipe.ingredients) & foldrOf folded removeItem player 
 
 {-
 craft player recipe = (addProducts . takeIngredients)
