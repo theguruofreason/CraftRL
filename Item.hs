@@ -29,6 +29,7 @@ instance Show Item where
                               where
                                 qual = qualityAdj !! q
                                 wt = " (" ++ show w ++ ") "
+  show (Primitive n) = unName n
 
 data ItemSlot = ItemSlot { _stackSize  :: Int
                          , _itemLetter :: Char
@@ -52,7 +53,7 @@ data Player = Player { _inventory   :: Inventory
   deriving (Show, Read, Eq)
 
 data Recipe = Recipe { _produced    :: [ItemSlot]
-                     , _ingredients :: [(Int,Item)]
+                     , _ingredients :: [ItemSlot]
                      , _toolsreq    :: [ItemSlot]
                      , _skillreq    :: [(Int,Skill)]
                      }
@@ -64,7 +65,7 @@ asword = Composite (Name "sword") 6 4 (Category "weapon") 10 []
 someiron = Primitive (Name "iron")
 
 recAxe ing1 ing2 = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
-                          , _ingredients = [(1,ing1),(1,ing2)]
+                          , _ingredients = [ItemSlot 2 'b' someiron]
                           , _toolsreq    = []
                           , _skillreq    = []
                           }
@@ -74,8 +75,8 @@ $(makeLenses ''ItemSlot)
 $(makeLenses ''Player)
 $(makeLenses ''Recipe)
 
-addItem :: Player -> ItemSlot -> Player
-addItem player itemslot = case findItem player p of
+addItem :: ItemSlot -> Player -> Player
+addItem itemslot player = case findItem player p of
                             Just (i,_) -> player & inventory %~ over (ix i) stackItems
                             Nothing    -> player & inventory %~ cons (itemslot & itemLetter .~ availLetter)
     where
@@ -83,10 +84,10 @@ addItem player itemslot = case findItem player p of
       availLetter = head $ (['a'..'z'] ++ ['A'..'Z']) \\ (player & toListOf (inventory.traverse.itemLetter))
       p _ i = i^.item == itemslot^.item
 
-removeItem :: Player -> ItemSlot -> Either String Player
-removeItem player itemslot = case findItem player p of
-                           Just (i,_) -> Right $ player & inventory %~ over (ix i) deleteItem
-                           Nothing    -> Left "Failed to find sufficient item."
+removeItem ::  ItemSlot -> Player -> Player
+removeItem itemslot player = case findItem player p of
+                           Just (i,_) -> player & inventory %~ over (ix i) deleteItem
+                           Nothing    -> player
     where
       deleteItem i = i & stackSize -~ itemslot^.stackSize
       p _ i = i^.item      == itemslot^.item
@@ -103,5 +104,11 @@ haveItem player itemslot = case findItem player p of
       p _ i = i^.item      == itemslot^.item
            && i^.stackSize >= itemslot^.stackSize
 
---put a craft function in here; use fold
---craft player recipe = over (recipe.traverse.ingredients) removeItem player
+takeIngredients player recipe = (recipe^.traverse.ingredients) & foldrOf folded removeItem player 
+
+{-
+craft player recipe = (addProducts . takeIngredients)
+  where
+    takeIngredients = foldMapOf player removeItem (recipe.traverse.ingredients) 
+    addProducts = foldMapOf player addItem (recipe.traverse.produced)
+-}
