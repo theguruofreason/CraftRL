@@ -107,7 +107,8 @@ haveItem player itemslot = case findItem player p of
       p _ i = i^.item      == itemslot^.item
            && i^.stackSize >= itemslot^.stackSize
 
-craft player recipe = addProducts (takeIngredients player recipe) recipe
+craft :: Player -> [ItemSlot] -> [ItemSlot] -> Player
+craft player takeThese giveThese = addProducts (takeIngredients player takeThese) giveThese
   where
-    takeIngredients = foldrOf (ingredients.folded) removeItem
-    addProducts = foldrOf (produced.folded) addItem
+    takeIngredients = foldr removeItem
+    addProducts = foldr addItem
