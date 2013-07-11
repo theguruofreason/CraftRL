@@ -27,7 +27,6 @@ instance Show Item where
                               where
                                 qual = qualityAdj !! q
                                 wt = " (" ++ show w ++ ") "
-  show (Primitive n) = unName n
 
 data ItemSlot = ItemSlot { _stackSize  :: Int
                          , _itemLetter :: Char
@@ -67,10 +66,10 @@ $(makeLenses ''Recipe)
 joe = addItem (ItemSlot 4 'a' someiron) $ Player empty 0 0 0 0
 theaxe = Composite (Name "axe") 4 3 (Category "tool") 10 []
 asword = Composite (Name "sword") 6 4 (Category "weapon") 10 []
-someiron = Primitive (Name "iron")
+someiron = Composite (Name "bar of iron") 0 3 (Category "metalbar") 5 []
 
 recAxe = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
-                , _ingredients = [ItemSlot 2 'b' someiron]
+                , _ingredients = [AbstractItem 1 (Category "wood"), AbstractItem 1 (Category "metal")]
                 , _toolsreq    = []
                 , _skillreq    = []
                 }
