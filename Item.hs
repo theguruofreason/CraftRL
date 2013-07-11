@@ -20,8 +20,6 @@ data Item = Composite { _name       :: Name
                       , _valuePer   :: Int
                       , _components :: [Item]
                       }
-          | Primitive { _name :: Name
-                      }
             deriving (Read, Eq)
 
 instance Show Item where
