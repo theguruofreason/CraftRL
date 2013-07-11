@@ -20,7 +20,7 @@ data Item = Composite { _name       :: Name
                       , _valuePer   :: Int
                       , _components :: [Item]
                       }
-          | Primitive { _name     :: Name
+          | Primitive { _name :: Name
                       }
             deriving (Read, Eq)
 
@@ -58,8 +58,13 @@ data Recipe = Recipe { _produced    :: [ItemSlot]
                      , _skillreq    :: [(Int,Skill)]
                      }
 
+$(makeLenses ''Item)
+$(makeLenses ''ItemSlot)
+$(makeLenses ''Player)
+$(makeLenses ''Recipe)
+
 -- Some quick junk stuff to test with --
-joe = Player empty 0 0 0 0
+joe = addItem (ItemSlot 4 'a' someiron) $ Player empty 0 0 0 0
 theaxe = Composite (Name "axe") 4 3 (Category "tool") 10 []
 asword = Composite (Name "sword") 6 4 (Category "weapon") 10 []
 someiron = Primitive (Name "iron")
@@ -70,15 +75,10 @@ recAxe = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
                 , _skillreq    = []
                 }
 
-$(makeLenses ''Item)
-$(makeLenses ''ItemSlot)
-$(makeLenses ''Player)
-$(makeLenses ''Recipe)
-
 addItem :: ItemSlot -> Player -> Player
 addItem itemslot player = case findItem player p of
                             Just (i,_) -> player & inventory %~ over (ix i) stackItems
-                            Nothing    -> checkIfLetterAvailable                                          
+                            Nothing    -> checkIfLetterAvailable
     where
       stackItems i = i & stackSize +~ itemslot^.stackSize
       availLetters = (['a'..'z'] ++ ['A'..'Z']) \\ (player & toListOf (inventory.traverse.itemLetter))
@@ -107,11 +107,7 @@ haveItem player itemslot = case findItem player p of
       p _ i = i^.item      == itemslot^.item
            && i^.stackSize >= itemslot^.stackSize
 
-takeIngredients player recipe = (recipe.ingredients) & foldrOf folded removeItem player 
-
-{-
-craft player recipe = (addProducts . takeIngredients)
+craft player recipe = addProducts (takeIngredients player recipe) recipe
   where
-    takeIngredients = foldMapOf player removeItem (recipe.traverse.ingredients) 
-    addProducts = foldMapOf player addItem (recipe.traverse.produced)
--}
+    takeIngredients = foldrOf (ingredients.folded) removeItem
+    addProducts = foldrOf (produced.folded) addItem
