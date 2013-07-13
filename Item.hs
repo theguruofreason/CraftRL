@@ -43,13 +43,13 @@ type Inventory = Vector ItemSlot
 data Skill = Weaponsmith | Armorsmith | Tailor | MaterialEfficiency
   deriving (Show, Read, Eq, Ord)
 
-data Player = Player { _inventory   :: Inventory
-                     , _skills      :: Map.Map Skill Float
+data Player = Player { _inventory :: Inventory
+                     , _skills    :: Map.Map Skill Float
                      }
   deriving (Show, Read, Eq)
 
-data Recipe = Recipe { _produced    :: [ItemSlot]
-                     , _required    :: Player
+data Recipe = Recipe { _produced :: [ItemSlot]
+                     , _required :: Player
                      }
 
 data Ingredient = DiscreteItem ItemSlot | AbstractItem Int Category
