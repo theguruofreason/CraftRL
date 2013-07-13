@@ -116,7 +116,12 @@ skillChance theRecipe recSkill thePlayer = chanceCalc playerSkillVal reqSkillVal
     playerSkillVal = (thePlayer^.skills) Map.! recSkill
 
 netSkillCalc :: Recipe -> Player -> Float
-netSkillCalc theRecipe thePlayer = (sum $ map (\s -> (skillChance theRecipe s thePlayer) * (skillWeight s)) reqSkills) / skillWeightsSum
+netSkillCalc theRecipe thePlayer =
+    (sum $ map (\s ->
+                    (skillChance theRecipe s thePlayer)
+                    *
+                    (skillWeight s)) reqSkills))
+    / skillWeightsSum
   where
     reqSkills = map fst $ reqSkillsList
     skillWeight skill = (theRecipe^.required.skills) Map.! skill
