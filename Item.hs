@@ -107,13 +107,9 @@ craft player takeThese giveThese = (takeIngredients player takeThese) `addProduc
     takeIngredients = foldr removeItem
     addProducts = foldr addItem
 
-
-{-- chance = ((1+(p-r))/(0.25+|p-r|))/2
-craftChance :: Player -> Recipe -> Float
-craftChance plyr recpe = -}
-
---getReqSkills :: Recipe -> [Skill]
---getReqSkills theRecipe = 
+--Will likely be turned into a where clause of larger crafting funtion
+getReqSkills :: Recipe -> [Skill]
+getReqSkills theRecipe = map fst $ Map.toList (theRecipe^.required.skills)
 
 skillChance :: Recipe -> Skill -> Player -> Float
 skillChance theRecipe recSkill thePlayer = chanceCalc playerSkillVal reqSkillVal
