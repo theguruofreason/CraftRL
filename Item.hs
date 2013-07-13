@@ -107,13 +107,17 @@ craft player takeThese giveThese = (takeIngredients player takeThese) `addProduc
     takeIngredients = foldr removeItem
     addProducts = foldr addItem
 
---Will likely be turned into a where clause of larger crafting funtion
-getReqSkills :: Recipe -> [Skill]
-getReqSkills theRecipe = map fst $ Map.toList (theRecipe^.required.skills)
-
 skillChance :: Recipe -> Skill -> Player -> Float
 skillChance theRecipe recSkill thePlayer = chanceCalc playerSkillVal reqSkillVal
   where
     chanceCalc p r = ( 1 + ( p - r )  / ( 0.25 + abs ( p - r ) ) ) / 2
     reqSkillVal = (theRecipe^.required.skills)  Map.! recSkill
     playerSkillVal = (thePlayer^.skills) Map.! recSkill
+
+netSkillCalc :: Recipe -> Player -> Float
+netSkillCalc theRecipe thePlayer = (sum $ map (\s -> (skillChance theRecipe s thePlayer) * (skillWeight s)) reqSkills) / skillWeightsSum
+  where
+    reqSkills = map fst $ reqSkillsList
+    skillWeight skill = (theRecipe^.required.skills) Map.! skill
+    reqSkillsList = Map.toList (theRecipe^.required.skills)
+    skillWeightsSum = sum (map snd reqSkillsList)
