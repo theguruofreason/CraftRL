@@ -130,3 +130,11 @@ netSkillCalc theRecipe thePlayer =
     skillWeight skill = (theRecipe^.required.skills) Map.! skill
     reqSkillsList = Map.toList (theRecipe^.required.skills)
     skillWeightsSum = sum (map snd reqSkillsList)
+
+skillGain :: Player -> Recipe -> Player
+skillGain thePlayer theRecipe = foldr (\s ->
+                                           skills %~ (Map.adjust (+ gain s) s)
+                                      ) thePlayer reqSkills
+  where
+    gain skill = ((1 - skillChance theRecipe skill thePlayer) * (theRecipe^.required.skills) Map.! skill) / 2
+    reqSkills = map fst $ Map.toList (theRecipe^.required.skills)
