@@ -112,4 +112,12 @@ craft player takeThese giveThese = (takeIngredients player takeThese) `addProduc
 craftChance :: Player -> Recipe -> Float
 craftChance plyr recpe = -}
 
-skillChance 
+--getReqSkills :: Recipe -> [Skill]
+--getReqSkills theRecipe = 
+
+skillChance :: Recipe -> Skill -> Player -> Float
+skillChance theRecipe recSkill thePlayer = chanceCalc playerSkillVal reqSkillVal
+  where
+    chanceCalc p r = ( 1 + ( p - r )  / ( 0.25 + abs ( p - r ) ) ) / 2
+    reqSkillVal = (theRecipe^.required.skills)  Map.! recSkill
+    playerSkillVal = (thePlayer^.skills) Map.! recSkill
