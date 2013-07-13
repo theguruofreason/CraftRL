@@ -3,6 +3,7 @@ module Item where
 import           Control.Lens
 import           Data.List    ((\\))
 import           Data.Vector  (Vector, empty)
+import qualified Data.Map as Map
 
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
@@ -40,19 +41,15 @@ instance Show ItemSlot where
 type Inventory = Vector ItemSlot
 
 data Skill = Weaponsmith | Armorsmith | Tailor | MaterialEfficiency
+  deriving (Show, Read, Eq, Ord)
 
 data Player = Player { _inventory   :: Inventory
-                     , _weaponsmith :: Float
-                     , _armorsmith  :: Float
-                     , _tailor      :: Float
-                     , _materialeff :: Float
+                     , _skills      :: Map.Map Skill Float
                      }
   deriving (Show, Read, Eq)
 
 data Recipe = Recipe { _produced    :: [ItemSlot]
-                     , _ingredients :: [Ingredient]
-                     , _toolsreq    :: [ItemSlot]
-                     , _skillreq    :: [(Int,Skill)]
+                     , _required    :: Player
                      }
 
 data Ingredient = DiscreteItem ItemSlot | AbstractItem Int Category
