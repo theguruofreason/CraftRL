@@ -60,15 +60,13 @@ $(makeLenses ''Player)
 $(makeLenses ''Recipe)
 
 -- Some quick junk stuff to test with --
-joe = addItem (ItemSlot 4 'a' someiron) $ Player empty 0 0 0 0
+joe = addItem (ItemSlot 4 'a' someiron) $ Player empty (Map.fromList [(Weaponsmith, 0),(Armorsmith, 0),(Tailor,0),(MaterialEfficiency,0)])
 theaxe = Composite (Name "axe") 4 3 (Category "tool") 10 []
 asword = Composite (Name "sword") 6 4 (Category "weapon") 10 []
 someiron = Composite (Name "bar of iron") 0 3 (Category "metalbar") 5 []
 
 recAxe = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
-                , _ingredients = [AbstractItem 1 (Category "wood"), AbstractItem 1 (Category "metal")]
-                , _toolsreq    = []
-                , _skillreq    = []
+                , _required    = Player empty (Map.fromList [(Weaponsmith, 1)])
                 }
 
 addItem :: ItemSlot -> Player -> Player
