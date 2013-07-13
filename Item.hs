@@ -95,14 +95,21 @@ findItem player p = player^.inventory & ifind p
 
 haveItem :: Player -> ItemSlot -> Bool
 haveItem player itemslot = case findItem player p of
-                         Just (_,_) -> True
+                         Just _ -> True
                          Nothing -> False
     where
       p _ i = i^.item      == itemslot^.item
            && i^.stackSize >= itemslot^.stackSize
 
 craft :: Player -> [ItemSlot] -> [ItemSlot] -> Player
-craft player takeThese giveThese = addProducts (takeIngredients player takeThese) giveThese
+craft player takeThese giveThese = (takeIngredients player takeThese) `addProducts` giveThese
   where
     takeIngredients = foldr removeItem
     addProducts = foldr addItem
+
+
+{-- chance = ((1+(p-r))/(0.25+|p-r|))/2
+craftChance :: Player -> Recipe -> Float
+craftChance plyr recpe = -}
+
+skillChance 
