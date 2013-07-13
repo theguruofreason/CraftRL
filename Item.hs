@@ -1,9 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Item where
 import           Control.Lens
-import           Data.List    ((\\))
-import           Data.Vector  (Vector, empty)
-import qualified Data.Map as Map
+import           Data.List     ((\\))
+import qualified Data.Map      as Map
+import           Data.Vector   (Vector, empty)
+import           System.Random
 
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
