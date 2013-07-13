@@ -21,3 +21,4 @@ executable CraftRL
                       ,containers < 0.6
                       ,vector < 0.11
                       ,lens < 4
+                      ,random < 1.1
