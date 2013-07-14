@@ -120,10 +120,8 @@ netSkillCalc theRecipe thePlayer =
     (sum $ map (\s ->
                     (skillChance theRecipe s thePlayer)
                     *
-                    (skillWeight s)
-               )
-     reqSkills
-    )
+                    (skillWeight s))
+     reqSkills)
     / skillWeightsSum
   where
     reqSkills = map fst $ reqSkillsList
