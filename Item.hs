@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Item where
 import           Control.Lens
-import           Data.List     ((\\))
+import           Data.List     ((\\),intersperse)
 import qualified Data.Map      as Map
 import           System.Random
 
