@@ -35,7 +35,7 @@ data Item = Composite { _name       :: Name
             deriving (Read, Eq)
 
 instance Show Item where
-  show (Composite n q w _ _ _) = qual ++ unName n ++ wt
+  show (Composite n _ q w _ _ _ ) = qual ++ unName n ++ wt
                               where
                                 qual = qualityAdj !! q
                                 wt = " (" ++ show w ++ ") "
@@ -72,9 +72,9 @@ $(makeLenses ''Recipe)
 
 -- Some quick junk stuff to test with --
 joe = addItem (ItemSlot 4 'a' someiron) $ Player empty (Map.fromList [(Weaponsmith, 4),(Armorsmith, 2),(Tailor,1),(MaterialEfficiency,6)])
-theaxe = Composite (Name "axe") 4 3 (Category "tool") 10 []
-asword = Composite (Name "sword") 6 4 (Category "weapon") 10 []
-someiron = Composite (Name "bar of iron") 0 3 (Category "metalbar") 5 []
+theaxe = Composite (Name "axe") Tool 4 3 (Category "tool") 10 []
+asword = Composite (Name "sword") Weapon 6 4 (Category "weapon") 10 []
+someiron = Composite (Name "bar of iron") CraftMat 0 3 (Category "metalbar") 5 []
 
 recAxe = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
                 , _required    = Player empty (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
@@ -146,3 +146,8 @@ skillGain thePlayer theRecipe = foldr (\s ->
   where
     gain skill = ((1 - skillChance theRecipe skill thePlayer) * (theRecipe^.required.skills) Map.! skill) / 2
     reqSkills = map fst $ Map.toList (theRecipe^.required.skills)
+
+collectDisplayCat :: InvType -> Player -> [ItemSlot]
+collectDisplayCat cat thePlayer = undefined
+  where
+    itemDispCats = (thePlayer^.inventory)
