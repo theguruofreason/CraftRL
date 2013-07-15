@@ -12,10 +12,20 @@ qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great
 newtype Category = Category { unCategory :: String }
     deriving (Read,Eq)
 
+data InvType = Weapon | Armor | Tool | CraftMat
+  deriving (Read, Eq, Ord)
+
+instance Show InvType where
+  show Armor = "Armor"
+  show Weapon = "Weapons"
+  show Tool = "Tools"
+  show CraftMat = "Raw Materials"
+
 newtype Name = Name { unName :: String }
     deriving (Read,Eq)
 
 data Item = Composite { _name       :: Name
+                      , _displayCat :: InvType
                       , _quality    :: Int
                       , _weight     :: Int
                       , _category   :: Category
