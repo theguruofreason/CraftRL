@@ -145,6 +145,4 @@ skillGain thePlayer theRecipe = foldr (\s ->
     reqSkills = map fst $ Map.toList (theRecipe^.required.skills)
 
 collectDisplayCat :: InvType -> Player -> [ItemSlot]
-collectDisplayCat cat thePlayer = undefined
-  where
-    itemDispCats = (thePlayer^.inventory)
+collectDisplayCat cat thePlayer = thePlayer^.. (filtered (== cat) (inventory.item.displayCat))
