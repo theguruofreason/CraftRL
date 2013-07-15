@@ -144,7 +144,15 @@ skillGain thePlayer theRecipe = foldr (\s ->
     gain skill = ((1 - skillChance theRecipe skill thePlayer) * (theRecipe^.required.skills) Map.! skill) / 2
     reqSkills = map fst $ Map.toList (theRecipe^.required.skills)
 
-collectDisplayCat :: InvType -> Player -> [ItemSlot]
-collectDisplayCat cat thePlayer = thePlayer^.inventory^..folded.filtered predicate
+collectDisplayCat :: Player -> InvType -> [ItemSlot]
+collectDisplayCat thePlayer cat = thePlayer^.inventory^..folded.filtered predicate
     where
       predicate i = i^.item^.displayCat == cat
+
+showDisplayCat :: Player -> InvType -> String
+showDisplayCat thePlayer cat = concat $ intersperse "\n" $ map show $ collectDisplayCat thePlayer cat
+
+showMainInventory :: Player -> String
+showMainInventory thePlayer = concat $ map (showDisplayCat thePlayer) invTypes
+  where
+    invTypes = [Weapon,Armor,Tool,CraftMat]
