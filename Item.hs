@@ -48,12 +48,10 @@ data ItemSlot = ItemSlot { _stackSize  :: Int
 instance Show ItemSlot where
   show (ItemSlot s l i) = l : " - " ++ show i ++ " x" ++ show s
 
-type Inventory = [ItemSlot]
-
 data Skill = Weaponsmith | Armorsmith | Tailor | MaterialEfficiency
   deriving (Show, Read, Eq, Ord)
 
-data Player = Player { _inventory :: Inventory
+data Player = Player { _inventory :: [ItemSlot]
                      , _skills    :: Map.Map Skill Float
                      }
   deriving (Show, Read, Eq)
