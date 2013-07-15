@@ -3,7 +3,6 @@ module Item where
 import           Control.Lens
 import           Data.List     ((\\))
 import qualified Data.Map      as Map
-import           Data.Vector   (Vector, empty)
 import           System.Random
 
 qualityAdj :: [String]
@@ -49,7 +48,7 @@ data ItemSlot = ItemSlot { _stackSize  :: Int
 instance Show ItemSlot where
   show (ItemSlot s l i) = l : " - " ++ show i ++ " x" ++ show s
 
-type Inventory = Vector ItemSlot
+type Inventory = [ItemSlot]
 
 data Skill = Weaponsmith | Armorsmith | Tailor | MaterialEfficiency
   deriving (Show, Read, Eq, Ord)
@@ -71,13 +70,13 @@ $(makeLenses ''Player)
 $(makeLenses ''Recipe)
 
 -- Some quick junk stuff to test with --
-joe = addItem (ItemSlot 4 'a' someiron) $ Player empty (Map.fromList [(Weaponsmith, 4),(Armorsmith, 2),(Tailor,1),(MaterialEfficiency,6)])
+joe = addItem (ItemSlot 4 'a' someiron) $ Player [] (Map.fromList [(Weaponsmith, 4),(Armorsmith, 2),(Tailor,1),(MaterialEfficiency,6)])
 theaxe = Composite (Name "axe") Tool 4 3 (Category "tool") 10 []
 asword = Composite (Name "sword") Weapon 6 4 (Category "weapon") 10 []
 someiron = Composite (Name "bar of iron") CraftMat 0 3 (Category "metalbar") 5 []
 
 recAxe = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
-                , _required    = Player empty (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
+                , _required    = Player [] (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
                 }
 
 addItem :: ItemSlot -> Player -> Player
