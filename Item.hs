@@ -56,7 +56,7 @@ data Player = Player { _inventory :: [ItemSlot]
                      }
   deriving (Show, Read, Eq)
 
-data Recipe = Recipe { _produced :: [ItemSlot]
+data Recipe = Recipe { _produced :: ItemSlot
                      , _required :: Player
                      }
 
@@ -70,10 +70,10 @@ $(makeLenses ''Recipe)
 -- Some quick junk stuff to test with --
 joe = addItem (ItemSlot 4 'a' someiron) $ Player [] (Map.fromList [(Weaponsmith, 4),(Armorsmith, 2),(Tailor,1),(MaterialEfficiency,6)])
 theaxe = Composite (Name "axe") Tool 4 3 (Category "tool") 10 []
-asword = Composite (Name "sword") Weapon 6 4 (Category "weapon") 10 []
+asword = Composite (Name "sword") Weapon 6 4 (Category "weapon") 5 []
 someiron = Composite (Name "bar of iron") CraftMat 0 3 (Category "metalbar") 5 []
 
-recAxe = Recipe { _produced    = [ItemSlot 1 'a' theaxe]
+recAxe = Recipe { _produced    = ItemSlot 1 'a' theaxe
                 , _required    = Player [] (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
                 }
 
@@ -110,10 +110,9 @@ haveItem player itemslot = case findItem player p of
            && i^.stackSize >= itemslot^.stackSize
 
 craft :: Player -> Recipe -> Player
-craft thePlayer theRecipe = (takeIngredients thePlayer $ theRecipe^.required.inventory) `addProducts` (theRecipe^.produced)
+craft thePlayer theRecipe = (theRecipe^.produced) `addItem` (takeIngredients thePlayer $ theRecipe^.required.inventory)
   where
     takeIngredients = foldr removeItem
-    addProducts = foldr addItem
 
 skillChance :: Recipe -> Skill -> Player -> Float
 skillChance theRecipe recSkill thePlayer = chanceCalc playerSkillVal reqSkillVal
