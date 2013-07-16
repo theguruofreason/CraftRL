@@ -164,6 +164,11 @@ giveQualityBonus points = produced.item.quality +~ points
 giveValueBonus :: Recipe -> Recipe
 giveValueBonus theRecipe = theRecipe & valuePers *~ qualities
   where
-    qualities = theRecipe^.produced^.item.quality
+    qualities = (theRecipe^.produced^.item.quality)
     valuePers = produced.item.valuePer
 
+giveMaterialValueBonus :: Recipe -> Recipe
+giveMaterialValueBonus theRecipe = foldr (valuePers +~) theRecipe matValues
+  where
+    matValues = theRecipe^.required.inventory^..traverse.item.valuePer
+    valuePers = produced.item.valuePer
