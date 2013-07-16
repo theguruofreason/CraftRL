@@ -159,5 +159,12 @@ showMainInventory thePlayer = concat $ map (showDisplayCat thePlayer) invTypes
 experimentChance :: Player -> Recipe -> Int -> Float
 experimentChance thePlayer theRecipe points = (netSkillCalc theRecipe thePlayer) ^ points
 
-giveQualityBonus :: Recipe -> Int -> Recipe
-giveQualityBonus theRecipe points = produced.traversed.item.quality +~ points $ theRecipe
+giveQualityBonus :: Int -> (Recipe -> Recipe)
+giveQualityBonus points = produced.item.quality +~ points
+
+giveValueBonus :: Recipe -> Recipe
+giveValueBonus theRecipe = theRecipe & valuePers *~ qualities
+  where
+    qualities = theRecipe^.produced^.item.quality
+    valuePers = produced.item.valuePer
+
