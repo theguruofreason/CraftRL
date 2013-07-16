@@ -73,7 +73,7 @@ asword = Composite (Name "sword") Weapon 6 4 (Category "weapon") 5 []
 someiron = Composite (Name "bar of iron") CraftMat 0 3 (Category "metalbar") 5 []
 
 recAxe = Recipe { _produced    = ItemSlot 1 'a' theaxe
-                , _required    = Player [] (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
+                , _required    = Player [ItemSlot 1 'a' someiron] (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
                 }
 
 addItem :: ItemSlot -> Player -> Player
