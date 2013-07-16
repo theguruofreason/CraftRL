@@ -3,7 +3,6 @@ module Item where
 import           Control.Lens
 import           Data.List     ((\\),intersperse)
 import qualified Data.Map      as Map
-import           System.Random
 
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
