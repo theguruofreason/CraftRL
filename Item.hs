@@ -1,8 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Item where
 import           Control.Lens
-import           Data.List     ((\\),intersperse)
-import qualified Data.Map      as Map
 
 qualityAdj :: [String]
 qualityAdj = ["", "miserable ", "poor ", "sub-par ", "average ", "good ", "great ", "excellent ", "legendary "]
@@ -50,7 +48,10 @@ instance Show ItemSlot where
 $(makeLenses ''Item)
 $(makeLenses ''ItemSlot)
 
--- Some quick junk stuff to test with --
+
+-- Testing Items --
+
+theaxe, asword, someiron :: Item
 theaxe = Composite (Name "axe") Tool 4 3 (Category "tool") 10 []
 asword = Composite (Name "sword") Weapon 6 4 (Category "weapon") 5 []
 someiron = Composite (Name "bar of iron") CraftMat 0 3 (Category "metalbar") 5 []
