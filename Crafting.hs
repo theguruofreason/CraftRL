@@ -6,8 +6,9 @@ import           Item
 import           Player
 
 
-data Recipe = Recipe { _produced :: ItemSlot
-                     , _required :: Player
+data Recipe = Recipe { _produced    :: ItemSlot
+                     , _required    :: Player
+                     , _ingredients :: [Ingredient]
                      }
 
 data Ingredient = DiscreteItem ItemSlot | AbstractItem Int Category
