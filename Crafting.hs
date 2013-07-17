@@ -73,5 +73,6 @@ giveMaterialValueBonus theRecipe = foldr (valuePers +~) theRecipe matValues
 -- Recipes --
 
 recAxe = Recipe { _produced    = ItemSlot 1 'a' theaxe
-                , _required    = Player [ItemSlot 1 'a' someiron] (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
+                , _required    = Player [] (Map.fromList [(Weaponsmith, 3),(Armorsmith, 1)])
+                , _ingredients = [AbstractItem 1 (Category "metal"), AbstractItem 1 (Category "wood")]
                 }
