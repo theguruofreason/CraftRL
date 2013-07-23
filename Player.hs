@@ -32,7 +32,7 @@ addItem itemslot player = case findItem player p of
 
 removeItem ::  ItemSlot -> Player -> Player
 removeItem itemslot player = case findItem player p of
-                           Just (i,_) -> player & inventory %~ over (ix i) deleteItem
+                           Just (i,_) -> cleanupInventory $ player & inventory %~ over (ix i) deleteItem
                            Nothing    -> player
     where
       deleteItem i = i & stackSize -~ itemslot^.stackSize
@@ -50,6 +50,12 @@ haveItem player itemslot = case findItem player p of
       p _ i = i^.item      == itemslot^.item
            && i^.stackSize >= itemslot^.stackSize
 
+cleanupInventory :: Player -> Player
+cleanupInventory thePlayer = thePlayer & inventory .~ cleaned
+    where
+      cleaned = thePlayer^.inventory^..folded.filtered predicate
+      predicate i = i^.stackSize > 0
+
 
 -- Display Inventory --
 
@@ -65,7 +71,6 @@ showMainInventory :: Player -> String
 showMainInventory thePlayer = concat $ map (showDisplayCat thePlayer) invTypes
   where
     invTypes = [Weapon,Armor,Tool,CraftMat]
-
 
 -- Test Players --
 
