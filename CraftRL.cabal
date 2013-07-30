@@ -22,5 +22,5 @@ executable CraftRL
                       ,vector < 0.11
                       ,lens < 4
                       ,random < 1.1
-                      ,helm 0.4.0
+                      ,helm < 0.5
                       ,SDL < 1.5
