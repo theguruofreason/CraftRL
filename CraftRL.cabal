@@ -27,3 +27,4 @@ executable CraftRL
                       ,filepath < 1.5
                       ,helm < 0.5
                       ,SDL < 1.5
+					  ,directory < 1.5
