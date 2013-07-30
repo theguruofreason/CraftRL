@@ -3,3 +3,6 @@ dist
 .#*
 cabal-dev
 *_flymake.*
+*.hi
+*.o
+*.exe
