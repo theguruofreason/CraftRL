@@ -15,3 +15,4 @@ modRecPlayerInv f itemslot theRecipe = theRecipe & (required) %~ f itemslot
 
 modRecIngredients :: (Ingredient -> [Ingredient] -> [Ingredient]) -> Ingredient -> Recipe -> Recipe
 modRecIngredients f theIngredient theRecipe = theRecipe & (ingredients) %~ (f theIngredient)
+
