@@ -24,8 +24,8 @@ data Tile = Tile { _inv      :: [ItemSlot]
                  , _creature :: Maybe Player
                  }
 
-data GameState = GameState { _thePlayer      :: Player
-                           , _theWorld       :: World
+data GameState = GameState { _thePlayer :: Player
+                           , _theWorld  :: World
                            }
 
 $(makeLenses ''Tile)
@@ -47,7 +47,7 @@ featSS :: FilePath -> FilePath
 featSS dir = dir </> "resources" </> "img" </> "feat.png"
 treeTile, doorTile :: FilePath -> Tile
 treeTile dir = Tile [] (croppedImage (0,0) 30 32 (featSS dir)) Nothing
-doorTile dir = Tile [] (croppedImage (62,32) 32 32 (featSS dir)) Nothing                        
+doorTile dir = Tile [] (croppedImage (62,32) 32 32 (featSS dir)) Nothing
 
 testWorld :: FilePath -> World
 testWorld dir = Map.fromList [((0,0), treeTile dir),((1,0), doorTile dir)]
